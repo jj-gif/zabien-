@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07110d">
+<title>Zabian Language Archive</title>
+<style>
+:root{
+  --bg:#050806;
+  --panel:#0d1712;
+  --panel-2:#12231a;
+  --line:#294537;
+  --text:#eefcf2;
+  --muted:#9bb5a4;
+  --accent:#7dff9d;
+  --accent-2:#b9ff6a;
+  --danger:#ff8181;
+  --shadow:0 18px 50px rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% -10%,rgba(125,255,157,.14),transparent 30rem),
+    radial-gradient(circle at 95% 15%,rgba(185,255,106,.08),transparent 27rem),
+    linear-gradient(180deg,#030504,var(--bg));
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  min-height:100vh;
+}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+a{color:inherit}
+.shell{width:min(1180px,100%);margin:auto;padding:18px 14px 80px}
+.hero{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:26px 20px;
+  background:linear-gradient(140deg,rgba(18,35,26,.95),rgba(6,14,10,.94));
+  box-shadow:var(--shadow);
+}
+.hero:before,.hero:after{
+  content:"";
+  position:absolute;
+  width:220px;height:220px;border-radius:50%;
+  border:1px solid rgba(125,255,157,.13);
+}
+.hero:before{right:-90px;top:-120px;box-shadow:0 0 80px rgba(125,255,157,.12) inset}
+.hero:after{left:-120px;bottom:-170px}
+.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem}
+h1{font-size:clamp(2.15rem,8vw,4.5rem);line-height:.92;margin:10px 0 12px;letter-spacing:-.06em}
+.hero p{max-width:760px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{
+  border:1px solid var(--line);
+  color:var(--text);
+  background:#101c15;
+  padding:12px 15px;
+  border-radius:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+.btn.primary{background:var(--accent);color:#061008;border-color:transparent}
+.btn:active{transform:scale(.98)}
+.quick-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:18px}
+.stat{border:1px solid var(--line);border-radius:16px;padding:13px;background:rgba(4,10,7,.45)}
+.stat strong{display:block;font-size:1.35rem;color:var(--accent-2)}
+.stat span{color:var(--muted);font-size:.82rem}
+.tabs{
+  position:sticky;top:0;z-index:20;
+  display:flex;gap:8px;overflow-x:auto;
+  padding:12px 0;
+  background:linear-gradient(var(--bg) 70%,transparent);
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  white-space:nowrap;border:1px solid var(--line);background:#0b130f;color:var(--muted);
+  border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer
+}
+.tab.active{background:var(--accent);color:#061008;border-color:var(--accent)}
+.view{display:none}
+.view.active{display:block}
+.section{margin-top:14px}
+.section-head{display:flex;justify-content:space-between;gap:12px;align-items:end;margin:24px 2px 12px}
+.section-head h2{margin:0;font-size:1.45rem}
+.section-head p{margin:0;color:var(--muted);font-size:.9rem}
+.panel{
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(17,31,23,.94),rgba(8,15,11,.94));
+  border-radius:20px;padding:16px;box-shadow:var(--shadow)
+}
+.search-row{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:10px}
+.input,select{
+  width:100%;border:1px solid var(--line);background:#08100c;color:var(--text);
+  padding:13px 14px;border-radius:14px;outline:none
+}
+.input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(125,255,157,.1)}
+.dictionary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:12px}
+.word-card{
+  border:1px solid var(--line);background:rgba(8,16,12,.82);border-radius:17px;padding:15px;
+  display:flex;flex-direction:column;gap:8px
+}
+.word-top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.alien-word{font-size:1.25rem;color:var(--accent);font-weight:900;letter-spacing:.02em}
+.english{font-weight:800;font-size:1.02rem}
+.meta{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);background:#0b1510}
+.word-note{color:var(--muted);font-size:.9rem;line-height:1.4}
+.example{font-size:.88rem;border-left:2px solid var(--accent);padding-left:9px;color:#d5e7da}
+.icon-btn{border:1px solid var(--line);background:#101c15;color:var(--text);border-radius:10px;padding:7px 9px;cursor:pointer}
+.empty{padding:32px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:17px;grid-column:1/-1}
+.rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rule{border:1px solid var(--line);border-radius:17px;background:#09120d;padding:16px}
+.rule h3{margin:0 0 8px;color:var(--accent);font-size:1.03rem}
+.rule p,.rule li{color:var(--muted);line-height:1.5}
+.rule ul{padding-left:18px;margin:8px 0 0}
+.code{
+  margin-top:10px;padding:11px;border-radius:12px;background:#030705;border:1px solid #21372c;
+  color:#dcffe5;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88rem;overflow:auto
+}
+.builder-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.builder-grid .full{grid-column:1/-1}
+.output{
+  min-height:120px;border:1px solid var(--line);border-radius:17px;background:#040806;padding:18px;
+  display:flex;flex-direction:column;justify-content:center;gap:8px
+}
+.output .big{font-size:clamp(1.5rem,6vw,2.5rem);font-weight:950;color:var(--accent)}
+.output .translation{color:var(--muted)}
+.toggle-row{display:flex;gap:9px;flex-wrap:wrap}
+.check{
+  display:flex;gap:8px;align-items:center;border:1px solid var(--line);background:#09120d;padding:11px 12px;border-radius:13px
+}
+.check input{accent-color:var(--accent);width:18px;height:18px}
+.phrase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.phrase{border:1px solid var(--line);border-radius:17px;padding:15px;background:#09120d}
+.phrase .z{font-size:1.15rem;color:var(--accent);font-weight:900}
+.phrase .e{margin-top:5px;color:var(--muted)}
+.phrase .literal{margin-top:8px;font-size:.78rem;color:#6f8f7a}
+.notice{border:1px solid #526c2c;background:rgba(185,255,106,.08);padding:14px;border-radius:16px;color:#dfffb6;line-height:1.45}
+.footer{margin-top:28px;text-align:center;color:#6f8f7a;font-size:.85rem}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);
+  background:#eaffef;color:#07110d;padding:11px 15px;border-radius:999px;font-weight:900;
+  opacity:0;pointer-events:none;transition:.2s;z-index:50
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent)}
+@media(max-width:760px){
+  .quick-stats{grid-template-columns:1fr}
+  .search-row,.dictionary-grid,.rule-grid,.builder-grid,.phrase-grid{grid-template-columns:1fr}
+  .builder-grid .full{grid-column:auto}
+  .hero{padding:22px 17px}
+  .section-head{align-items:start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="hero">
+    <div class="eyebrow">Official Community Edition</div>
+    <h1>Zabian<br>Language Archive</h1>
+    <p>A complete searchable dictionary, pronunciation guide, grammar reference, sentence builder, and phrasebook for the alien language inspired by the original “zap, zub, zab” vocabulary.</p>
+    <div class="hero-actions">
+      <button class="btn primary" onclick="showTab('dictionary')">Open Dictionary</button>
+      <button class="btn" onclick="randomWord()">Random Word</button>
+    </div>
+    <div class="quick-stats">
+      <div class="stat"><strong id="wordCount">0</strong><span>dictionary entries</span></div>
+      <div class="stat"><strong>V–O–S</strong><span>default sentence order</span></div>
+      <div class="stat"><strong>100%</strong><span>offline and mobile friendly</span></div>
+      <div class="stat" title="The same browser is counted once per UTC day">
+        <strong id="visitCount" aria-live="polite">—</strong>
+        <span id="visitMeta">global visits · loading</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Sections">
+    <button class="tab active" data-tab="dictionary">Dictionary</button>
+    <button class="tab" data-tab="grammar">Grammar</button>
+    <button class="tab" data-tab="builder">Sentence Builder</button>
+    <button class="tab" data-tab="phrases">Phrasebook</button>
+  </nav>
+
+  <main>
+    <section id="dictionary" class="view active">
+      <div class="section-head">
+        <div>
+          <h2>Complete Dictionary</h2>
+          <p>Search in English or Zabian.</p>
+        </div>
+        <div id="resultCount" class="badge"></div>
+      </div>
+      <div class="panel">
+        <div class="search-row">
+          <input id="search" class="input" type="search" placeholder="Search: love, friend, zib, morning…" autocomplete="off">
+          <select id="category">
+            <option value="all">All categories</option>
+          </select>
+        </div>
+        <div id="dictionaryGrid" class="dictionary-grid"></div>
+      </div>
+    </section>
+
+    <section id="grammar" class="view">
+      <div class="section-head">
+        <div>
+          <h2>Grammar Rules</h2>
+          <p>The standardized rules used by this dictionary.</p>
+        </div>
+      </div>
+
+      <div class="notice">
+        The phrases from the original image are preserved as <strong>classic expressions</strong>. Some are shortened slang, so they do not always show every standard grammar particle.
+      </div>
+
+      <div class="rule-grid section">
+        <article class="rule">
+          <h3>1. Basic Word Order</h3>
+          <p>Zabian normally uses <strong>Verb–Object–Subject</strong>.</p>
+          <div class="code">Vek zub zab.<br>see you I<br>“I see you.”</div>
+        </article>
+
+        <article class="rule">
+          <h3>2. Pronouns</h3>
+          <p>Pronouns do not change form for subject or object.</p>
+          <ul>
+            <li><span class="kbd">zab</span> — I / me</li>
+            <li><span class="kbd">zub</span> — you</li>
+            <li><span class="kbd">zif</span> — he / him</li>
+            <li><span class="kbd">zaf</span> — she / her</li>
+            <li><span class="kbd">zop</span> — it</li>
+            <li><span class="kbd">vab</span> — we / us</li>
+            <li><span class="kbd">vib</span> — they / them</li>
+            <li><span class="kbd">zun</span> — you all</li>
+          </ul>
+        </article>
+
+        <article class="rule">
+          <h3>3. Tense Particles</h3>
+          <p>Tense appears at the beginning. It may be omitted when time is obvious.</p>
+          <div class="code">ba = past<br>bo = present/current<br>bi = future</div>
+          <div class="code">Ba vek zub zab. = I saw you.<br>Bi tev zub. = You will come.</div>
+        </article>
+
+        <article class="rule">
+          <h3>4. Negation</h3>
+          <p>Place <span class="kbd">bleb</span> immediately before the verb. With tense, tense comes first.</p>
+          <div class="code">Bleb zup zab. = I do not know.<br>Bi bleb tev zub. = You will not come.</div>
+        </article>
+
+        <article class="rule">
+          <h3>5. Questions</h3>
+          <p>Add <span class="kbd">kep</span> at the end. The normal word order remains unchanged.</p>
+          <div class="code">Zap mip zub kep?<br>want water you question<br>“Do you want water?”</div>
+        </article>
+
+        <article class="rule">
+          <h3>6. Question Words</h3>
+          <p>Question words occupy the place where the answer would normally appear.</p>
+          <div class="code">Vek zha zub kep? = What do you see?<br>Rov zhi zub kep? = Where are you going?</div>
+        </article>
+
+        <article class="rule">
+          <h3>7. The Copula Is Usually Omitted</h3>
+          <p>“Am,” “is,” and “are” are normally left out before adjectives and nouns.</p>
+          <div class="code">Fiz zab. = I am happy.<br>Vip vop zub. = You are a friend.</div>
+          <p><span class="kbd">es</span> may be used for emphasis or formal identity statements.</p>
+        </article>
+
+        <article class="rule">
+          <h3>8. Adjectives Follow Nouns</h3>
+          <p>The noun comes first, followed by its description.</p>
+          <div class="code">lom gor = big home<br>vip zil = beautiful person<br>ska dum = dark sky</div>
+        </article>
+
+        <article class="rule">
+          <h3>9. Possession</h3>
+          <p>Use <span class="kbd">na</span> between the possessed thing and its owner.</p>
+          <div class="code">lom na zab = my home<br>nam na zub = your name<br>buk na zif = his book</div>
+        </article>
+
+        <article class="rule">
+          <h3>10. Plurals</h3>
+          <p>Place <span class="kbd">ra</span> before a noun. Numbers make <span class="kbd">ra</span> optional.</p>
+          <div class="code">ra vip = people<br>tri vip = three people<br>ra tar = stars</div>
+        </article>
+
+        <article class="rule">
+          <h3>11. Commands</h3>
+          <p>Use <span class="kbd">ha</span> before a command. The subject is normally omitted.</p>
+          <div class="code">Ha dor gat. = Open the door.<br>Ha rov lom. = Go home.</div>
+        </article>
+
+        <article class="rule">
+          <h3>12. Adverbs</h3>
+          <p>Manner words usually follow the verb. Time and location phrases usually come before the final subject.</p>
+          <div class="code">Rov fas lom zab.<br>go quickly home I<br>“I go home quickly.”</div>
+        </article>
+
+        <article class="rule">
+          <h3>13. Joining Ideas</h3>
+          <p><span class="kbd">ka</span> means “and,” <span class="kbd">vo</span> means “or,” and <span class="kbd">nu</span> means “but.”</p>
+          <div class="code">Zap dop ka mip zab.<br>“I want food and water.”</div>
+        </article>
+
+        <article class="rule">
+          <h3>14. Conditions and Reasons</h3>
+          <p><span class="kbd">ke</span> introduces “if.” <span class="kbd">ta</span> introduces “because.”</p>
+          <div class="code">Ke tev zub, fiz zab.<br>“If you come, I am happy.”</div>
+        </article>
+
+        <article class="rule">
+          <h3>15. Comparison</h3>
+          <p>Use <span class="kbd">ma</span> for “more,” <span class="kbd">mu</span> for “most,” and <span class="kbd">tan</span> for “than.”</p>
+          <div class="code">zil ma zaf tan zab<br>“She is more beautiful than me.”</div>
+        </article>
+
+        <article class="rule">
+          <h3>16. Formal vs. Casual Speech</h3>
+          <p>Casual speech drops obvious pronouns and particles. Classic expressions such as <span class="kbd">zap</span> (“I want”) and <span class="kbd">zab zup</span> (“I don’t know”) are accepted idioms.</p>
+        </article>
+
+        <article class="rule">
+          <h3>17. Pronunciation</h3>
+          <ul>
+            <li><strong>a</strong> as in “father”</li>
+            <li><strong>e</strong> as in “bed”</li>
+            <li><strong>i</strong> as in “machine”</li>
+            <li><strong>o</strong> as in “go”</li>
+            <li><strong>u</strong> as in “rule”</li>
+            <li><strong>z, b, p, v, k, t, m, n, r, l</strong> use their normal English sounds</li>
+          </ul>
+        </article>
+
+        <article class="rule">
+          <h3>18. Stress</h3>
+          <p>Stress the first syllable unless a word contains a hyphen. In a hyphenated compound, stress the first syllable of each part.</p>
+          <div class="code">ZÁ-bian · ZÍB-zi-di · KÉP-ta</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="builder" class="view">
+      <div class="section-head">
+        <div>
+          <h2>Sentence Builder</h2>
+          <p>Build a standard Verb–Object–Subject sentence.</p>
+        </div>
+      </div>
+
+      <div class="panel builder-grid">
+        <label>
+          <span class="badge">Tense</span>
+          <select id="bTense">
+            <option value="">No tense particle</option>
+            <option value="ba">Past — ba</option>
+            <option value="bo">Present — bo</option>
+            <option value="bi">Future — bi</option>
+          </select>
+        </label>
+
+        <label>
+          <span class="badge">Subject</span>
+          <select id="bSubject"></select>
+        </label>
+
+        <label>
+          <span class="badge">Verb</span>
+          <select id="bVerb"></select>
+        </label>
+
+        <label>
+          <span class="badge">Object</span>
+          <select id="bObject"></select>
+        </label>
+
+        <div class="toggle-row full">
+          <label class="check"><input id="bNegative" type="checkbox"> Negative</label>
+          <label class="check"><input id="bQuestion" type="checkbox"> Question</label>
+        </div>
+
+        <div class="output full">
+          <div id="builtZabian" class="big">Vek zub zab.</div>
+          <div id="builtEnglish" class="translation">I see you.</div>
+          <button class="btn" onclick="copyText(document.getElementById('builtZabian').textContent)">Copy sentence</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="phrases" class="view">
+      <div class="section-head">
+        <div>
+          <h2>Phrasebook</h2>
+          <p>Classic and standardized everyday phrases.</p>
+        </div>
+      </div>
+      <div id="phraseGrid" class="phrase-grid"></div>
+    </section>
+  </main>
+
+  <div class="footer">Zabian Language Archive · Single-file offline edition</div>
+</div>
+<div id="toast" class="toast">Copied</div>
+
+<script>
+const dictionary = [
+  // Classic expressions
+  {z:"zap zup",e:"hello",pos:"expression",cat:"Classic",note:"Original greeting from the image.",x:"Zap zup!"},
+  {z:"zab zup",e:"I don't know",pos:"idiom",cat:"Classic",note:"Classic shortened slang; standard form: Bleb zup zab.",x:"Zab zup."},
+  {z:"zap",e:"want; I want",pos:"verb / idiom",cat:"Classic",note:"As a lone word it can mean “I want.”",x:"Zap dop zab."},
+  {z:"zib zub zab",e:"I love you",pos:"expression",cat:"Classic",note:"Literally: love + you + I.",x:"Zib zub zab."},
+  {z:"zibzidi",e:"skibidi",pos:"slang",cat:"Classic",note:"Playful slang retained from the original list.",x:"Zibzidi!"},
+  {z:"zap zub",e:"good",pos:"adjective",cat:"Classic",note:"Traditional two-word adjective.",x:"Dai zap zub."},
+  {z:"zeb zab zab",e:"goodnight",pos:"expression",cat:"Classic",note:"Traditional farewell used at night.",x:"Zeb zab zab."},
+  {z:"zeb zab zib",e:"good morning",pos:"expression",cat:"Classic",note:"Traditional morning greeting.",x:"Zeb zab zib!"},
+  {z:"zab zab",e:"same; me too",pos:"expression",cat:"Classic",note:"Used to agree that something is the same.",x:"Zab zab."},
+  {z:"blab",e:"okay; agreed",pos:"interjection",cat:"Classic",note:"Casual agreement.",x:"Blab!"},
+  {z:"zib",e:"yes; love",pos:"interjection / verb",cat:"Classic",note:"Context separates “yes” from the verb “love.”",x:"Zib, fiz zab."},
+  {z:"bleb bleb",e:"no",pos:"interjection",cat:"Classic",note:"Strong or clear negative answer.",x:"Bleb bleb."},
+  {z:"zob zep",e:"can; able to",pos:"auxiliary",cat:"Classic",note:"Traditional ability phrase.",x:"Zob zep ruk zab."},
+  {z:"vip vop",e:"friend",pos:"noun",cat:"Classic",note:"Literally “trusted person.”",x:"Vip vop zub."},
+
+  // Grammar
+  {z:"ba",e:"past tense marker",pos:"particle",cat:"Grammar",note:"Placed at the beginning.",x:"Ba vek zub zab."},
+  {z:"bo",e:"present/current tense marker",pos:"particle",cat:"Grammar",note:"Optional when the present is obvious.",x:"Bo dak dop zab."},
+  {z:"bi",e:"future tense marker",pos:"particle",cat:"Grammar",note:"Placed at the beginning.",x:"Bi tev zub."},
+  {z:"bleb",e:"not; negative marker",pos:"particle",cat:"Grammar",note:"Placed directly before the verb.",x:"Bleb zup zab."},
+  {z:"kep",e:"question marker",pos:"particle",cat:"Grammar",note:"Placed at the end of a question.",x:"Fiz zub kep?"},
+  {z:"ra",e:"plural marker",pos:"particle",cat:"Grammar",note:"Placed before a noun.",x:"Ra vip."},
+  {z:"na",e:"of; possessive marker",pos:"particle",cat:"Grammar",note:"Possessed thing + na + owner.",x:"Lom na zab."},
+  {z:"ha",e:"command marker",pos:"particle",cat:"Grammar",note:"Placed before an imperative.",x:"Ha rov lom."},
+  {z:"ka",e:"and",pos:"conjunction",cat:"Grammar",note:"Connects words or clauses.",x:"Dop ka mip."},
+  {z:"vo",e:"or",pos:"conjunction",cat:"Grammar",note:"Introduces an alternative.",x:"Dop vo mip."},
+  {z:"nu",e:"but",pos:"conjunction",cat:"Grammar",note:"Marks a contrast.",x:"Zap, nu dur."},
+  {z:"ke",e:"if",pos:"conjunction",cat:"Grammar",note:"Introduces a condition.",x:"Ke tev zub, fiz zab."},
+  {z:"ta",e:"because",pos:"conjunction",cat:"Grammar",note:"Introduces a reason.",x:"Fiz zab ta tev zub."},
+  {z:"ma",e:"more",pos:"comparison",cat:"Grammar",note:"Comparative marker.",x:"Gor ma."},
+  {z:"mu",e:"most",pos:"comparison",cat:"Grammar",note:"Superlative marker.",x:"Zil mu."},
+  {z:"tan",e:"than",pos:"comparison",cat:"Grammar",note:"Used in comparisons.",x:"Fas ma tan zab."},
+  {z:"es",e:"be; equal; formally is",pos:"verb",cat:"Grammar",note:"Usually omitted except for emphasis.",x:"Es led zif."},
+  {z:"di",e:"that; which; who",pos:"relative marker",cat:"Grammar",note:"Introduces a describing clause.",x:"Vip di sav zab."},
+  {z:"se",e:"very",pos:"intensifier",cat:"Grammar",note:"Placed before an adjective.",x:"Se fiz zab."},
+  {z:"li",e:"maybe; perhaps",pos:"particle",cat:"Grammar",note:"Shows uncertainty.",x:"Li tev zif."},
+  {z:"fi",e:"already",pos:"adverb",cat:"Grammar",note:"Usually follows tense or precedes the verb.",x:"Fi dak zab."},
+  {z:"yo",e:"still",pos:"adverb",cat:"Grammar",note:"Shows continuation.",x:"Yo wai zab."},
+  {z:"ri",e:"also; too",pos:"adverb",cat:"Grammar",note:"Adds another matching fact.",x:"Fiz ri zab."},
+
+  // Pronouns
+  {z:"zab",e:"I; me",pos:"pronoun",cat:"People",note:"First-person singular.",x:"Fiz zab."},
+  {z:"zub",e:"you",pos:"pronoun",cat:"People",note:"Second-person singular.",x:"Vek zub zab."},
+  {z:"zif",e:"he; him",pos:"pronoun",cat:"People",note:"Third-person masculine.",x:"Bi tev zif."},
+  {z:"zaf",e:"she; her",pos:"pronoun",cat:"People",note:"Third-person feminine.",x:"Zil zaf."},
+  {z:"zop",e:"it",pos:"pronoun",cat:"People",note:"Third-person neutral.",x:"Nov zop."},
+  {z:"vab",e:"we; us",pos:"pronoun",cat:"People",note:"First-person plural.",x:"Bi rov vab."},
+  {z:"vib",e:"they; them",pos:"pronoun",cat:"People",note:"Third-person plural.",x:"Vek vib zab."},
+  {z:"zun",e:"you all",pos:"pronoun",cat:"People",note:"Second-person plural.",x:"Zap zup, zun."},
+
+  // Question words
+  {z:"zhu",e:"who",pos:"question word",cat:"Questions",note:"Refers to a person.",x:"Tev zhu kep?"},
+  {z:"zha",e:"what",pos:"question word",cat:"Questions",note:"Refers to a thing or idea.",x:"Vek zha zub kep?"},
+  {z:"zhi",e:"where",pos:"question word",cat:"Questions",note:"Refers to a place.",x:"Rov zhi zub kep?"},
+  {z:"zho",e:"when",pos:"question word",cat:"Questions",note:"Refers to time.",x:"Tev zho zif kep?"},
+  {z:"zhe",e:"why",pos:"question word",cat:"Questions",note:"Asks for a reason.",x:"Kri zhe zub kep?"},
+  {z:"zhuv",e:"how",pos:"question word",cat:"Questions",note:"Asks about method or condition.",x:"Fon zhuv zop zub kep?"},
+
+  // People and relationships
+  {z:"vip",e:"person",pos:"noun",cat:"People",note:"General word for a person.",x:"Vip fiz."},
+  {z:"vop",e:"trusted; close; bonded",pos:"adjective",cat:"People",note:"Forms the compound vip vop, “friend.”",x:"Vip vop."},
+  {z:"fam",e:"family",pos:"noun",cat:"People",note:"A family or household group.",x:"Fam na zab."},
+  {z:"mat",e:"mother",pos:"noun",cat:"People",note:"Parent word.",x:"Mat na zab."},
+  {z:"patr",e:"father",pos:"noun",cat:"People",note:"Parent word.",x:"Patr na zif."},
+  {z:"kid",e:"child",pos:"noun",cat:"People",note:"Young person.",x:"Kid fiz."},
+  {z:"zel",e:"alien",pos:"noun",cat:"People",note:"A being from another world.",x:"Zel ruk Zabian."},
+  {z:"enak",e:"enemy",pos:"noun",cat:"People",note:"A hostile person or group.",x:"Vek enak zab."},
+  {z:"led",e:"leader",pos:"noun",cat:"People",note:"One who guides others.",x:"Es led zaf."},
+  {z:"nam",e:"name",pos:"noun",cat:"People",note:"Personal identifier.",x:"Nam na zub kep?"},
+  {z:"kin",e:"kind; caring",pos:"adjective",cat:"People",note:"Friendly in behavior.",x:"Vip kin."},
+  {z:"sma",e:"smart",pos:"adjective",cat:"People",note:"Intelligent.",x:"Sma zif."},
+
+  // Actions
+  {z:"zup",e:"know",pos:"verb",cat:"Actions",note:"To possess knowledge.",x:"Zup nam zab."},
+  {z:"zep",e:"do; act",pos:"verb",cat:"Actions",note:"General action verb.",x:"Zep zop zab."},
+  {z:"rov",e:"go",pos:"verb",cat:"Actions",note:"Move away or travel.",x:"Rov lom zab."},
+  {z:"tev",e:"come",pos:"verb",cat:"Actions",note:"Move toward the speaker.",x:"Bi tev zub."},
+  {z:"vek",e:"see",pos:"verb",cat:"Actions",note:"Perceive visually.",x:"Vek tar zab."},
+  {z:"luk",e:"look",pos:"verb",cat:"Actions",note:"Direct the eyes.",x:"Ha luk ska."},
+  {z:"lis",e:"listen",pos:"verb",cat:"Actions",note:"Pay attention to sound.",x:"Lis muz zab."},
+  {z:"hir",e:"hear",pos:"verb",cat:"Actions",note:"Perceive sound.",x:"Hir vox zab."},
+  {z:"ruk",e:"speak; say",pos:"verb",cat:"Actions",note:"Produce spoken language.",x:"Ruk Zabian zab."},
+  {z:"tel",e:"tell",pos:"verb",cat:"Actions",note:"Communicate information.",x:"Tel ans zub zab."},
+  {z:"ask",e:"ask",pos:"verb",cat:"Actions",note:"Request information.",x:"Ask qus zab."},
+  {z:"dak",e:"eat",pos:"verb",cat:"Actions",note:"Consume food.",x:"Dak dop zab."},
+  {z:"mik",e:"drink",pos:"verb",cat:"Actions",note:"Consume liquid.",x:"Mik mip zub."},
+  {z:"nub",e:"sleep",pos:"verb",cat:"Actions",note:"Rest while unconscious.",x:"Bi nub zab."},
+  {z:"fon",e:"make; build",pos:"verb",cat:"Actions",note:"Create or construct.",x:"Fon lom vab."},
+  {z:"kre",e:"create",pos:"verb",cat:"Actions",note:"Bring something new into existence.",x:"Kre gam zab."},
+  {z:"giv",e:"give",pos:"verb",cat:"Actions",note:"Transfer to another.",x:"Giv buk zub zab."},
+  {z:"tek",e:"take",pos:"verb",cat:"Actions",note:"Receive or carry away.",x:"Tek bop zif."},
+  {z:"hav",e:"have; possess",pos:"verb",cat:"Actions",note:"Own or hold.",x:"Hav buk zab."},
+  {z:"nid",e:"need",pos:"verb",cat:"Actions",note:"Require something.",x:"Nid sav zab."},
+  {z:"dor",e:"open",pos:"verb",cat:"Actions",note:"Move from closed to open.",x:"Ha dor gat."},
+  {z:"kir",e:"close",pos:"verb",cat:"Actions",note:"Move from open to closed.",x:"Ha kir gat."},
+  {z:"fen",e:"find",pos:"verb",cat:"Actions",note:"Discover or locate.",x:"Fen lom zif."},
+  {z:"lus",e:"lose",pos:"verb",cat:"Actions",note:"Fail to keep or locate.",x:"Ba lus buk zab."},
+  {z:"sav",e:"help; save",pos:"verb",cat:"Actions",note:"Assist or protect from harm.",x:"Sav zub zab."},
+  {z:"pil",e:"play",pos:"verb",cat:"Actions",note:"Engage in a game or activity.",x:"Pil gam vab."},
+  {z:"ron",e:"run",pos:"verb",cat:"Actions",note:"Move quickly on foot.",x:"Ron fas zif."},
+  {z:"wak",e:"walk",pos:"verb",cat:"Actions",note:"Move on foot.",x:"Wak slo zab."},
+  {z:"sit",e:"sit",pos:"verb",cat:"Actions",note:"Rest in a seated position.",x:"Sit zab."},
+  {z:"stan",e:"stand",pos:"verb",cat:"Actions",note:"Be upright.",x:"Stan zub."},
+  {z:"lek",e:"learn",pos:"verb",cat:"Actions",note:"Gain knowledge.",x:"Lek Zabian zab."},
+  {z:"tiz",e:"teach",pos:"verb",cat:"Actions",note:"Help another learn.",x:"Tiz Zabian zaf."},
+  {z:"zen",e:"think",pos:"verb",cat:"Actions",note:"Use the mind.",x:"Zen ide zab."},
+  {z:"fel",e:"feel",pos:"verb",cat:"Actions",note:"Experience an emotion or sensation.",x:"Fel fiz zab."},
+  {z:"wor",e:"work",pos:"verb",cat:"Actions",note:"Perform labor or a task.",x:"Wor zab."},
+  {z:"bik",e:"buy",pos:"verb",cat:"Actions",note:"Obtain by payment.",x:"Bik dop zif."},
+  {z:"sel",e:"sell",pos:"verb",cat:"Actions",note:"Exchange for payment.",x:"Sel bop zaf."},
+  {z:"wai",e:"wait",pos:"verb",cat:"Actions",note:"Remain until something happens.",x:"Ha wai."},
+  {z:"sar",e:"start",pos:"verb",cat:"Actions",note:"Begin.",x:"Ha sar gam."},
+  {z:"sto",e:"stop",pos:"verb",cat:"Actions",note:"End or halt.",x:"Ha sto."},
+  {z:"uze",e:"use",pos:"verb",cat:"Actions",note:"Employ for a purpose.",x:"Uze tel zub."},
+  {z:"rem",e:"remember",pos:"verb",cat:"Actions",note:"Keep or recall in memory.",x:"Rem nam zab."},
+  {z:"for",e:"forget",pos:"verb",cat:"Actions",note:"Fail to remember.",x:"Ba for zab."},
+  {z:"red",e:"read",pos:"verb",cat:"Actions",note:"Interpret written language.",x:"Red buk zab."},
+  {z:"rit",e:"write",pos:"verb",cat:"Actions",note:"Create written language.",x:"Rit phr zub."},
+  {z:"kal",e:"call",pos:"verb",cat:"Actions",note:"Contact or name.",x:"Kal zub zab."},
+  {z:"sen",e:"send",pos:"verb",cat:"Actions",note:"Cause something to go to another.",x:"Sen phr zaf."},
+  {z:"cha",e:"change",pos:"verb",cat:"Actions",note:"Make or become different.",x:"Cha bop zab."},
+  {z:"und",e:"understand",pos:"verb",cat:"Actions",note:"Comprehend meaning.",x:"Und zub zab."},
+  {z:"met",e:"meet",pos:"verb",cat:"Actions",note:"Encounter another person.",x:"Ba met zif zab."},
+  {z:"tra",e:"travel",pos:"verb",cat:"Actions",note:"Move between places.",x:"Tra wun vab."},
+  {z:"ari",e:"arrive",pos:"verb",cat:"Actions",note:"Reach a destination.",x:"Ba ari zaf."},
+  {z:"lef",e:"leave",pos:"verb",cat:"Actions",note:"Depart.",x:"Bi lef zif."},
+  {z:"chu",e:"choose",pos:"verb",cat:"Actions",note:"Select an option.",x:"Chu bop zub."},
+  {z:"tuk",e:"touch",pos:"verb",cat:"Actions",note:"Make physical contact.",x:"Tuk zop zab."},
+  {z:"hol",e:"hold",pos:"verb",cat:"Actions",note:"Keep in the hands or possession.",x:"Hol buk zaf."},
+  {z:"dre",e:"dream",pos:"verb",cat:"Actions",note:"Experience dreams or imagine.",x:"Dre tar zab."},
+  {z:"laf",e:"laugh",pos:"verb",cat:"Actions",note:"Express amusement.",x:"Laf vab."},
+  {z:"kri",e:"cry",pos:"verb",cat:"Actions",note:"Shed tears.",x:"Kri zif."},
+  {z:"smi",e:"smile",pos:"verb",cat:"Actions",note:"Show happiness with the face.",x:"Smi zub."},
+  {z:"fir",e:"fight",pos:"verb",cat:"Actions",note:"Engage in conflict.",x:"Fir enak zif."},
+  {z:"pro",e:"protect",pos:"verb",cat:"Actions",note:"Keep safe from harm.",x:"Pro fam zab."},
+  {z:"hop",e:"hope",pos:"verb",cat:"Actions",note:"Desire a possible future.",x:"Hop bi tev zub zab."},
+  {z:"bel",e:"believe",pos:"verb",cat:"Actions",note:"Accept as true.",x:"Bel zub zab."},
+
+  // Objects and places
+  {z:"lom",e:"home",pos:"noun",cat:"Places",note:"A place of residence.",x:"Lom na zab."},
+  {z:"lok",e:"place; location",pos:"noun",cat:"Places",note:"General location.",x:"Lok zhi kep?"},
+  {z:"cit",e:"city",pos:"noun",cat:"Places",note:"Large settlement.",x:"Cit gor."},
+  {z:"rum",e:"room",pos:"noun",cat:"Places",note:"Interior space.",x:"Rum min."},
+  {z:"gat",e:"door; gate",pos:"noun",cat:"Places",note:"An entrance barrier.",x:"Dor gat."},
+  {z:"pat",e:"path; road",pos:"noun",cat:"Places",note:"A route for travel.",x:"Pat far."},
+  {z:"kar",e:"vehicle; car",pos:"noun",cat:"Objects",note:"A machine for travel.",x:"Kar fas."},
+  {z:"bop",e:"thing; object",pos:"noun",cat:"Objects",note:"General object word.",x:"Bop zha kep?"},
+  {z:"dop",e:"food",pos:"noun",cat:"Objects",note:"Anything eaten.",x:"Zap dop zab."},
+  {z:"mip",e:"water",pos:"noun",cat:"Objects",note:"Water or drinkable liquid.",x:"Mik mip zab."},
+  {z:"buk",e:"book",pos:"noun",cat:"Objects",note:"A written work.",x:"Red buk zaf."},
+  {z:"skr",e:"screen",pos:"noun",cat:"Objects",note:"Display surface.",x:"Skr lux."},
+  {z:"telk",e:"phone; communicator",pos:"noun",cat:"Objects",note:"A communication device.",x:"Uze telk zab."},
+  {z:"mon",e:"money",pos:"noun",cat:"Objects",note:"Currency or wealth.",x:"Hav mon zif."},
+  {z:"num",e:"number",pos:"noun",cat:"Objects",note:"A mathematical value.",x:"Num zha kep?"},
+  {z:"kod",e:"code",pos:"noun",cat:"Objects",note:"Instructions or a symbolic system.",x:"Rit kod zab."},
+  {z:"gam",e:"game",pos:"noun",cat:"Objects",note:"A structured form of play.",x:"Pil gam vab."},
+  {z:"muz",e:"music",pos:"noun",cat:"Objects",note:"Organized sound.",x:"Lis muz zab."},
+  {z:"lan",e:"language",pos:"noun",cat:"Language",note:"A communication system.",x:"Lan Zabian."},
+  {z:"wer",e:"word",pos:"noun",cat:"Language",note:"A basic unit of language.",x:"Wer nov."},
+  {z:"phr",e:"sentence; message; phrase",pos:"noun",cat:"Language",note:"A complete or partial utterance.",x:"Rit phr zub."},
+  {z:"vox",e:"voice",pos:"noun",cat:"Language",note:"Sound produced in speech.",x:"Vox lod."},
+  {z:"qus",e:"question",pos:"noun",cat:"Language",note:"A request for information.",x:"Ask qus zab."},
+  {z:"ans",e:"answer",pos:"noun",cat:"Language",note:"A response to a question.",x:"Zup ans zif."},
+  {z:"prob",e:"problem",pos:"noun",cat:"Ideas",note:"A difficulty needing a solution.",x:"Prob dur."},
+  {z:"ide",e:"idea",pos:"noun",cat:"Ideas",note:"A thought or concept.",x:"Ide sma."},
+
+  // Nature and space
+  {z:"sol",e:"sun",pos:"noun",cat:"Nature",note:"The local star seen in daytime.",x:"Sol lux."},
+  {z:"mun",e:"moon",pos:"noun",cat:"Nature",note:"A natural satellite.",x:"Mun zil."},
+  {z:"tar",e:"star",pos:"noun",cat:"Nature",note:"A distant sun.",x:"Ra tar."},
+  {z:"ska",e:"sky",pos:"noun",cat:"Nature",note:"The space seen above.",x:"Ska blu."},
+  {z:"gra",e:"ground; earth",pos:"noun",cat:"Nature",note:"The surface below.",x:"Gra kol."},
+  {z:"fex",e:"fire",pos:"noun",cat:"Nature",note:"Flame and heat.",x:"Fex har."},
+  {z:"aer",e:"air",pos:"noun",cat:"Nature",note:"The atmosphere breathed.",x:"Aer kol."},
+  {z:"mar",e:"sea; ocean",pos:"noun",cat:"Nature",note:"A large body of water.",x:"Mar gor."},
+  {z:"tor",e:"tree",pos:"noun",cat:"Nature",note:"A large woody plant.",x:"Tor eld."},
+  {z:"pla",e:"plant",pos:"noun",cat:"Nature",note:"A living growing organism.",x:"Pla gren."},
+  {z:"nim",e:"animal",pos:"noun",cat:"Nature",note:"A non-plant living creature.",x:"Nim min."},
+  {z:"wun",e:"world; planet",pos:"noun",cat:"Nature",note:"A planet or complete world.",x:"Wun nov."},
+  {z:"lux",e:"light",pos:"noun / adjective",cat:"Nature",note:"Brightness or illuminated.",x:"Skr lux."},
+  {z:"dum",e:"dark; darkness",pos:"noun / adjective",cat:"Nature",note:"Lack of light.",x:"Ska dum."},
+
+  // Time
+  {z:"zeb",e:"time",pos:"noun",cat:"Time",note:"General time word.",x:"Zeb zho kep?"},
+  {z:"dai",e:"day",pos:"noun",cat:"Time",note:"A daytime cycle.",x:"Dai zap zub."},
+  {z:"noi",e:"night",pos:"noun",cat:"Time",note:"Dark part of the day.",x:"Noi dum."},
+  {z:"mor",e:"morning",pos:"noun",cat:"Time",note:"Early part of the day.",x:"Mor lux."},
+  {z:"eve",e:"evening",pos:"noun",cat:"Time",note:"Late part of the day.",x:"Eve kol."},
+  {z:"tod",e:"today",pos:"adverb",cat:"Time",note:"The current day.",x:"Wor tod zab."},
+  {z:"tom",e:"tomorrow",pos:"adverb",cat:"Time",note:"The next day.",x:"Bi tev tom zub."},
+  {z:"yesa",e:"yesterday",pos:"adverb",cat:"Time",note:"The previous day.",x:"Ba met yesa vab."},
+  {z:"nau",e:"now",pos:"adverb",cat:"Time",note:"At the present moment.",x:"Ha rov nau."},
+
+  // Feelings and qualities
+  {z:"fiz",e:"happy",pos:"adjective",cat:"Feelings",note:"Feeling joy.",x:"Fiz zab."},
+  {z:"bez",e:"sad",pos:"adjective",cat:"Feelings",note:"Feeling sorrow.",x:"Bez zif."},
+  {z:"gar",e:"angry",pos:"adjective",cat:"Feelings",note:"Feeling anger.",x:"Gar zaf."},
+  {z:"shak",e:"afraid",pos:"adjective",cat:"Feelings",note:"Feeling fear.",x:"Shak kid."},
+  {z:"sef",e:"safe",pos:"adjective",cat:"Qualities",note:"Protected from danger.",x:"Lom sef."},
+  {z:"kav",e:"dangerous; danger",pos:"adjective / noun",cat:"Qualities",note:"Likely to cause harm.",x:"Lok kav."},
+  {z:"zil",e:"beautiful",pos:"adjective",cat:"Qualities",note:"Visually or emotionally pleasing.",x:"Mun zil."},
+  {z:"rag",e:"ugly",pos:"adjective",cat:"Qualities",note:"Unpleasant in appearance.",x:"Bop rag."},
+  {z:"gor",e:"big; large",pos:"adjective",cat:"Qualities",note:"Large in size.",x:"Wun gor."},
+  {z:"min",e:"small; little",pos:"adjective",cat:"Qualities",note:"Small in size.",x:"Nim min."},
+  {z:"nov",e:"new",pos:"adjective",cat:"Qualities",note:"Recently created or discovered.",x:"Kod nov."},
+  {z:"eld",e:"old",pos:"adjective",cat:"Qualities",note:"Existing for a long time.",x:"Tor eld."},
+  {z:"har",e:"hot",pos:"adjective",cat:"Qualities",note:"High temperature.",x:"Fex har."},
+  {z:"kol",e:"cold",pos:"adjective",cat:"Qualities",note:"Low temperature.",x:"Mip kol."},
+  {z:"fas",e:"fast; quickly",pos:"adjective / adverb",cat:"Qualities",note:"At high speed.",x:"Ron fas zif."},
+  {z:"slo",e:"slow; slowly",pos:"adjective / adverb",cat:"Qualities",note:"At low speed.",x:"Wak slo zab."},
+  {z:"str",e:"strong",pos:"adjective",cat:"Qualities",note:"Powerful or durable.",x:"Zel str."},
+  {z:"wik",e:"weak",pos:"adjective",cat:"Qualities",note:"Lacking strength.",x:"Enak wik."},
+  {z:"ez",e:"easy",pos:"adjective",cat:"Qualities",note:"Not difficult.",x:"Gam ez."},
+  {z:"dur",e:"hard; difficult",pos:"adjective",cat:"Qualities",note:"Requiring effort.",x:"Prob dur."},
+  {z:"dif",e:"different",pos:"adjective",cat:"Qualities",note:"Not the same.",x:"Bop dif."},
+  {z:"tru",e:"true",pos:"adjective",cat:"Qualities",note:"Correct or real.",x:"Phr tru."},
+  {z:"fal",e:"false",pos:"adjective",cat:"Qualities",note:"Incorrect or unreal.",x:"Phr fal."},
+  {z:"redy",e:"ready",pos:"adjective",cat:"Qualities",note:"Prepared to act.",x:"Redy vab."},
+  {z:"liv",e:"alive",pos:"adjective",cat:"Qualities",note:"Living.",x:"Nim liv."},
+  {z:"ded",e:"dead",pos:"adjective",cat:"Qualities",note:"No longer living.",x:"Pla ded."},
+  {z:"ful",e:"full",pos:"adjective",cat:"Qualities",note:"Containing as much as possible.",x:"Rum ful."},
+  {z:"emp",e:"empty",pos:"adjective",cat:"Qualities",note:"Containing nothing.",x:"Rum emp."},
+  {z:"nir",e:"near",pos:"adjective / adverb",cat:"Qualities",note:"At a short distance.",x:"Lom nir."},
+  {z:"far",e:"far",pos:"adjective / adverb",cat:"Qualities",note:"At a great distance.",x:"Wun far."},
+  {z:"kor",e:"right; correct",pos:"adjective",cat:"Qualities",note:"Accurate or proper.",x:"Ans kor."},
+  {z:"wrang",e:"wrong",pos:"adjective",cat:"Qualities",note:"Incorrect.",x:"Ans wrang."},
+  {z:"imp",e:"important",pos:"adjective",cat:"Qualities",note:"Having great value or effect.",x:"Phr imp."},
+  {z:"sek",e:"secret",pos:"adjective / noun",cat:"Qualities",note:"Hidden information.",x:"Ide sek."},
+  {z:"stran",e:"strange",pos:"adjective",cat:"Qualities",note:"Unusual or unfamiliar.",x:"Zel stran."},
+  {z:"qui",e:"quiet",pos:"adjective",cat:"Qualities",note:"Making little sound.",x:"Rum qui."},
+  {z:"lod",e:"loud",pos:"adjective",cat:"Qualities",note:"Making strong sound.",x:"Vox lod."},
+  {z:"fun",e:"funny; amusing",pos:"adjective",cat:"Qualities",note:"Causing laughter.",x:"Phr fun."},
+
+  // Colors
+  {z:"rax",e:"red",pos:"color",cat:"Colors",note:"Color word.",x:"Bop rax."},
+  {z:"blu",e:"blue",pos:"color",cat:"Colors",note:"Color word.",x:"Ska blu."},
+  {z:"gren",e:"green",pos:"color",cat:"Colors",note:"Color word.",x:"Pla gren."},
+  {z:"yel",e:"yellow",pos:"color",cat:"Colors",note:"Color word.",x:"Sol yel."},
+  {z:"nulx",e:"black",pos:"color",cat:"Colors",note:"Color word.",x:"Ska nulx."},
+  {z:"luma",e:"white",pos:"color",cat:"Colors",note:"Color word.",x:"Mun luma."},
+  {z:"pur",e:"purple",pos:"color",cat:"Colors",note:"Color word.",x:"Lux pur."},
+  {z:"oran",e:"orange",pos:"color",cat:"Colors",note:"Color word.",x:"Fex oran."},
+  {z:"pik",e:"pink",pos:"color",cat:"Colors",note:"Color word.",x:"Pla pik."},
+  {z:"grex",e:"gray",pos:"color",cat:"Colors",note:"Color word.",x:"Gra grex."},
+
+  // Numbers
+  {z:"nul",e:"zero",pos:"number",cat:"Numbers",note:"0",x:"Nul."},
+  {z:"un",e:"one",pos:"number",cat:"Numbers",note:"1",x:"Un tar."},
+  {z:"du",e:"two",pos:"number",cat:"Numbers",note:"2",x:"Du vip."},
+  {z:"tri",e:"three",pos:"number",cat:"Numbers",note:"3",x:"Tri buk."},
+  {z:"quad",e:"four",pos:"number",cat:"Numbers",note:"4",x:"Quad gat."},
+  {z:"pen",e:"five",pos:"number",cat:"Numbers",note:"5",x:"Pen nim."},
+  {z:"ses",e:"six",pos:"number",cat:"Numbers",note:"6",x:"Ses tar."},
+  {z:"sep",e:"seven",pos:"number",cat:"Numbers",note:"7",x:"Sep dai."},
+  {z:"ok",e:"eight",pos:"number",cat:"Numbers",note:"8",x:"Ok bop."},
+  {z:"nev",e:"nine",pos:"number",cat:"Numbers",note:"9",x:"Nev wer."},
+  {z:"dek",e:"ten",pos:"number",cat:"Numbers",note:"10",x:"Dek vip."},
+  {z:"hund",e:"hundred",pos:"number",cat:"Numbers",note:"100",x:"Un hund."}
+];
+
+const phrases = [
+  {z:"Zap zup!",e:"Hello!",l:"classic greeting"},
+  {z:"Zeb zab zib!",e:"Good morning!",l:"classic morning greeting"},
+  {z:"Zeb zab zab.",e:"Goodnight.",l:"classic night farewell"},
+  {z:"Zib zub zab.",e:"I love you.",l:"love + you + I"},
+  {z:"Vip vop zub.",e:"You are a friend.",l:"friend + you"},
+  {z:"Fiz zub kep?",e:"Are you happy?",l:"happy + you + question"},
+  {z:"Zib, fiz zab.",e:"Yes, I am happy.",l:"yes + happy + I"},
+  {z:"Bleb zup zab.",e:"I do not know.",l:"not + know + I"},
+  {z:"Zab zup.",e:"I don't know.",l:"classic shortened idiom"},
+  {z:"Zap dop zab.",e:"I want food.",l:"want + food + I"},
+  {z:"Zap mip zub kep?",e:"Do you want water?",l:"want + water + you + question"},
+  {z:"Vek zub zab.",e:"I see you.",l:"see + you + I"},
+  {z:"Ba vek zub zab.",e:"I saw you.",l:"past + see + you + I"},
+  {z:"Bi tev zub kep?",e:"Will you come?",l:"future + come + you + question"},
+  {z:"Rov lom zab.",e:"I am going home.",l:"go + home + I"},
+  {z:"Ha rov lom.",e:"Go home.",l:"command + go + home"},
+  {z:"Nam na zub zha kep?",e:"What is your name?",l:"name + of + you + what + question"},
+  {z:"Nam na zab Rico.",e:"My name is Rico.",l:"name + of + I + Rico"},
+  {z:"Und zub zab.",e:"I understand you.",l:"understand + you + I"},
+  {z:"Bleb und zab.",e:"I do not understand.",l:"not + understand + I"},
+  {z:"Ruk slo zub kep?",e:"Can you speak slowly?",l:"speak + slowly + you + question"},
+  {z:"Sav zab zub kep?",e:"Can you help me?",l:"help + me + you + question"},
+  {z:"Zhi lom na zub kep?",e:"Where is your home?",l:"where + home + of + you + question"},
+  {z:"Ke tev zub, fiz zab.",e:"If you come, I will be happy.",l:"if + come + you, happy + I"},
+  {z:"Blab.",e:"Okay.",l:"classic agreement"},
+  {z:"Bleb bleb.",e:"No.",l:"classic negative answer"},
+  {z:"Zab zab.",e:"Same / me too.",l:"classic agreement phrase"}
+];
+
+const subjects = [
+  ["zab","I"],["zub","you"],["zif","he"],["zaf","she"],["zop","it"],["vab","we"],["vib","they"],["zun","you all"]
+];
+
+const builderVerbs = [
+  ["vek","see"],["zib","love"],["zap","want"],["zup","know"],["tev","come to"],["rov","go to"],
+  ["dak","eat"],["mik","drink"],["ruk","speak to"],["sav","help"],["fen","find"],["uze","use"]
+];
+
+const builderObjects = [
+  ["zub","you"],["zab","me"],["dop","food"],["mip","water"],["lom","home"],["buk","the book"],
+  ["gam","the game"],["kod","the code"],["vip vop","a friend"],["zop","it"],["","nothing"]
+];
+
+const search = document.getElementById("search");
+const category = document.getElementById("category");
+const grid = document.getElementById("dictionaryGrid");
+const resultCount = document.getElementById("resultCount");
+const toast = document.getElementById("toast");
+
+function titleCase(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(showToast);
+  }else{
+    const ta=document.createElement("textarea");
+    ta.value=text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); ta.remove(); showToast();
+  }
+}
+function showToast(){
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),1200);
+}
+
+function renderDictionary(){
+  const q=search.value.trim().toLowerCase();
+  const c=category.value;
+  const list=dictionary.filter(w=>{
+    const matchesCategory=c==="all"||w.cat===c;
+    const hay=[w.z,w.e,w.pos,w.cat,w.note,w.x].join(" ").toLowerCase();
+    return matchesCategory && hay.includes(q);
+  });
+  resultCount.textContent=`${list.length} shown`;
+  grid.innerHTML=list.length?list.map(w=>`
+    <article class="word-card">
+      <div class="word-top">
+        <div>
+          <div class="alien-word">${w.z}</div>
+          <div class="english">${w.e}</div>
+        </div>
+        <button class="icon-btn" aria-label="Copy ${w.z}" onclick='copyText(${JSON.stringify(w.z)})'>Copy</button>
+      </div>
+      <div class="meta"><span class="badge">${w.pos}</span><span class="badge">${w.cat}</span></div>
+      <div class="word-note">${w.note}</div>
+      <div class="example">${w.x}</div>
+    </article>`).join(""):`<div class="empty">No matching Zabian words found.</div>`;
+}
+
+function populateCategories(){
+  [...new Set(dictionary.map(w=>w.cat))].sort().forEach(c=>{
+    const option=document.createElement("option");
+    option.value=c; option.textContent=c; category.appendChild(option);
+  });
+}
+
+function showTab(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===id));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));
+  window.scrollTo({top:document.querySelector(".tabs").offsetTop,behavior:"smooth"});
+}
+
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>showTab(t.dataset.tab)));
+search.addEventListener("input",renderDictionary);
+category.addEventListener("change",renderDictionary);
+
+function randomWord(){
+  const w=dictionary[Math.floor(Math.random()*dictionary.length)];
+  showTab("dictionary");
+  search.value=w.z;
+  category.value="all";
+  renderDictionary();
+}
+
+function renderPhrases(){
+  document.getElementById("phraseGrid").innerHTML=phrases.map(p=>`
+    <article class="phrase">
+      <div class="word-top">
+        <div class="z">${p.z}</div>
+        <button class="icon-btn" onclick='copyText(${JSON.stringify(p.z)})'>Copy</button>
+      </div>
+      <div class="e">${p.e}</div>
+      <div class="literal">${p.l}</div>
+    </article>`).join("");
+}
+
+function fillSelect(id,items){
+  const el=document.getElementById(id);
+  el.innerHTML=items.map(([v,l])=>`<option value="${v}" data-label="${l}">${l} — ${v||"none"}</option>`).join("");
+}
+
+function selectedLabel(id){
+  const el=document.getElementById(id);
+  return el.options[el.selectedIndex].dataset.label;
+}
+
+function conjugateEnglish(verb,subject,tense,negative){
+  const third=subject==="he"||subject==="she"||subject==="it";
+  const pastMap={see:"saw",love:"loved",want:"wanted",know:"knew","come to":"came to","go to":"went to",eat:"ate",drink:"drank","speak to":"spoke to",help:"helped",find:"found",use:"used"};
+  let v=verb;
+  if(tense==="ba"){
+    v=negative?verb:(pastMap[verb]||verb+"ed");
+    return negative?`did not ${verb}`:v;
+  }
+  if(tense==="bi") return `${negative?"will not":"will"} ${verb}`;
+  if(negative) return `${third?"does":"do"} not ${verb}`;
+  if(third){
+    if(verb==="have") return "has";
+    if(verb.endsWith("y")) return verb.slice(0,-1)+"ies";
+    if(/(s|x|z|ch|sh|o)$/.test(verb)) return verb+"es";
+    const parts=verb.split(" ");
+    parts[0]+="s";
+    return parts.join(" ");
+  }
+  return verb;
+}
+
+function updateBuilder(){
+  const tense=document.getElementById("bTense").value;
+  const subjectZ=document.getElementById("bSubject").value;
+  const verbZ=document.getElementById("bVerb").value;
+  const objectZ=document.getElementById("bObject").value;
+  const neg=document.getElementById("bNegative").checked;
+  const question=document.getElementById("bQuestion").checked;
+
+  const subjectE=selectedLabel("bSubject");
+  const verbE=selectedLabel("bVerb");
+  const objectE=selectedLabel("bObject");
+
+  let parts=[];
+  if(tense) parts.push(tense);
+  if(neg) parts.push("bleb");
+  parts.push(verbZ);
+  if(objectZ) parts.push(objectZ);
+  parts.push(subjectZ);
+  if(question) parts.push("kep");
+
+  let z=parts.join(" ");
+  z=titleCase(z)+(question?"?":".");
+  document.getElementById("builtZabian").textContent=z;
+
+  const engVerb=conjugateEnglish(verbE,subjectE,tense,neg);
+  let e;
+  if(question){
+    if(tense==="bi") e=`Will ${subjectE}${neg?" not":""} ${verbE}${objectE!=="nothing"?" "+objectE:""}?`;
+    else if(tense==="ba") e=`Did ${subjectE}${neg?" not":""} ${verbE}${objectE!=="nothing"?" "+objectE:""}?`;
+    else e=`${subjectE==="he"||subjectE==="she"||subjectE==="it"?"Does":"Do"} ${subjectE}${neg?" not":""} ${verbE}${objectE!=="nothing"?" "+objectE:""}?`;
+  }else{
+    e=`${titleCase(subjectE)} ${engVerb}${objectE!=="nothing"?" "+objectE:""}.`;
+  }
+  document.getElementById("builtEnglish").textContent=e;
+}
+
+
+const VISITOR_STORAGE_KEY = "zabianVisitorIdV1";
+
+function createVisitorId(){
+  if(window.crypto && typeof window.crypto.randomUUID === "function"){
+    return window.crypto.randomUUID();
+  }
+  const randomPart = Math.random().toString(36).slice(2);
+  return `zab-${Date.now().toString(36)}-${randomPart}`;
+}
+
+function getVisitorId(){
+  try{
+    let id = localStorage.getItem(VISITOR_STORAGE_KEY);
+    if(!id){
+      id = createVisitorId();
+      localStorage.setItem(VISITOR_STORAGE_KEY,id);
+    }
+    return id;
+  }catch(error){
+    // Private browsing or strict storage settings can block localStorage.
+    // A temporary ID still lets the page display the counter.
+    return createVisitorId();
+  }
+}
+
+function formatCount(value){
+  return new Intl.NumberFormat().format(Number(value) || 0);
+}
+
+async function loadVisitCounter(){
+  const countElement = document.getElementById("visitCount");
+  const metaElement = document.getElementById("visitMeta");
+  if(!countElement || !metaElement) return;
+
+  try{
+    const response = await fetch("/.netlify/functions/visit",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({visitorId:getVisitorId()}),
+      cache:"no-store"
+    });
+
+    if(!response.ok){
+      throw new Error(`Counter request failed: ${response.status}`);
+    }
+
+    const stats = await response.json();
+    countElement.textContent = formatCount(stats.totalVisits);
+    metaElement.textContent =
+      `${formatCount(stats.todayVisits)} today · ${formatCount(stats.uniqueVisitors)} unique devices`;
+    countElement.title = `${formatCount(stats.totalVisits)} total daily-unique visits`;
+  }catch(error){
+    console.warn("Visit counter unavailable:",error);
+    countElement.textContent = "—";
+    metaElement.textContent =
+      location.protocol === "file:"
+        ? "deploy full project to activate"
+        : "counter temporarily unavailable";
+  }
+}
+
+populateCategories();
+renderDictionary();
+renderPhrases();
+fillSelect("bSubject",subjects);
+fillSelect("bVerb",builderVerbs);
+fillSelect("bObject",builderObjects);
+["bTense","bSubject","bVerb","bObject","bNegative","bQuestion"].forEach(id=>document.getElementById(id).addEventListener("change",updateBuilder));
+document.getElementById("bSubject").value="zab";
+document.getElementById("bVerb").value="vek";
+document.getElementById("bObject").value="zub";
+updateBuilder();
+document.getElementById("wordCount").textContent=dictionary.length;
+loadVisitCounter();
+</script>
+</body>
+</html>
